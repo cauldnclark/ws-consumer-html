@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Websocket HTML Consumer</h1>
+    <h2>
+      <button type="button" id="y">YORME:</button
+      ><span style="margin-left: 5px" id="yorme">0</span>
+    </h2>
+    <h2>
+      <button type="button" id="p">PACMAN:</button
+      ><span style="margin-left: 5px" id="pacman">0</span>
+    </h2>
+    <h2>
+      <button type="button" id="pn">PING:</button
+      ><span style="margin-left: 5px" id="ping">0</span>
+    </h2>
+    <script>
+      const websocket = new WebSocket("ws://localhost:8088");
+      const YORME = "yorme";
+      const PACMAN = "pacman";
+      const PING = "ping";
+
+      websocket.onmessage = function onMessage(event) {
+        const data = JSON.parse(event.data);
+
+        const yormeSpan = document.getElementById(YORME);
+        const pacmanSpan = document.getElementById(PACMAN);
+        const pingSpan = document.getElementById(PING);
+
+        yormeSpan.innerHTML = data[YORME];
+        pacmanSpan.innerHTML = data[PACMAN];
+        pingSpan.innerHTML = data[PING];
+      };
+
+      const yormeBtn = document.getElementById("y");
+      const pacmanBtn = document.getElementById("p");
+      const pingBtn = document.getElementById("pn");
+
+      yormeBtn.addEventListener("click", function (event) {
+        const payload = {
+          name: YORME,
+          count: 1,
+        };
+
+        websocket.send(JSON.stringify(payload));
+      });
+
+      pacmanBtn.addEventListener("click", function (event) {
+        const payload = {
+          name: PACMAN,
+          count: 1,
+        };
+
+        websocket.send(JSON.stringify(payload));
+      });
+
+      pingBtn.addEventListener("click", function (event) {
+        const payload = {
+          name: PING,
+          count: 1,
+        };
+
+        websocket.send(JSON.stringify(payload));
+      });
+    </script>
+  </body>
+</html>
